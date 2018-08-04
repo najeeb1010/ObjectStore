@@ -1,0 +1,56 @@
+﻿DROP DATABASE IF EXISTS `ObjectStoreDb`;
+CREATE DATABASE `ObjectStoreDb`;
+USE `ObjectStoreDb`;
+
+DROP TABLE IF EXISTS `L_Objects`;
+CREATE TABLE `L_Objects` (
+    `key_ObjectId` VARCHAR(64) NOT NULL,
+    `WhenAdded` DATETIME NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (key_ObjectId)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `L_ObjectUniqueIndexes`;
+CREATE TABLE `L_ObjectUniqueIndexes` (
+    `key_EntryId` BIGINT(20) NOT NULL AUTO_INCREMENT,
+    `fkey_ObjectId` VARCHAR(64) NOT NULL,
+    `ObjectType` VARCHAR(1024) NOT NULL,
+    `Value` NVARCHAR(2048) NOT NULL,
+    `WhenAdded` DATETIME NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (key_EntryId),
+    FOREIGN KEY (fkey_ObjectId) REFERENCES ObjectStoreDb.L_Objects (key_ObjectId)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `L_ObjectVersions`;
+CREATE TABLE `L_ObjectVersions` (
+    `key_ObjectVersionId` VARCHAR(64) NOT NULL,
+    `fkey_ObjectId` VARCHAR(64) NOT NULL,
+    `ObjectJson` NVARCHAR(65535) NOT NULL,
+    `Comment` NVARCHAR(1024) NOT NULL,
+    `WhenAdded` DATETIME NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (key_ObjectVersionId),
+    FOREIGN KEY (fkey_ObjectId) REFERENCES ObjectStoreDb.L_Objects (key_ObjectId)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `L_ObjectDependencies`;
+CREATE TABLE `L_ObjectDependencies` (
+    `fkey_PrincipalObjectId` VARCHAR(64) NOT NULL,
+    `fkey_DependentObjectId` VARCHAR(64) NOT NULL,
+    `PrincipalType` VARCHAR(1024) NOT NULL,
+    `DependentType` VARCHAR(1024) NOT NULL,
+    `OptionalArg` VARCHAR(128) NOT NULL,
+    `WhenAdded` DATETIME NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (fkey_PrincipalObjectId, fkey_DependentObjectId),
+    FOREIGN KEY (fkey_PrincipalObjectId) REFERENCES ObjectStoreDb.L_Objects (key_ObjectId)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (fkey_DependentObjectId) REFERENCES ObjectStoreDb.L_Objects (key_ObjectId)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+SHOW TABLES;
+
+SELECT * FROM L_Objects;
+SELECT * FROM L_ObjectVersions;
+SELECT * FROM L_ObjectDependencies;
+SELECT * FROM L_ObjectUniqueIndexes;
