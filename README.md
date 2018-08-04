@@ -1,6 +1,6 @@
 # README
 ### Please read the accompanying wiki page
-Please make sure you have read the wiki page after you have completed compiling the sources.
+Please make sure you have read the [wiki](https://github.com/najeeb1010/object.store/wiki) after you have completed compiling the sources and running the test suite.
 
 ## Compiling the source
 
@@ -16,4 +16,4 @@ Please make sure you have read the wiki page after you have completed compiling 
 1. You will be able to view the test suite in the NUnit runner.
 1. Run the entire test suite by pressing F5.
 1. Hopefully you should see a green bar after the test suite completes running all the tests. This shouldn't take more than a few seconds.
-1. Read the accompanying wiki page.
+1. Read the accompanying [wiki](https://github.com/najeeb1010/object.store/wiki).
